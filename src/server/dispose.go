@@ -9,11 +9,11 @@ package server
 
 import (
 	"fmt"
-	"go-stress-testing/model"
-	"go-stress-testing/server/client"
-	"go-stress-testing/server/golink"
-	"go-stress-testing/server/statistics"
-	"go-stress-testing/server/verify"
+	"model"
+	"server/client"
+	"server/golink"
+	"server/statistics"
+	"server/verify"
 	"sync"
 	"time"
 )

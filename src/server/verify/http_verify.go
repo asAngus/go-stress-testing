@@ -11,7 +11,7 @@ import (
 	"compress/gzip"
 	"encoding/json"
 	"fmt"
-	"go-stress-testing/model"
+	"model"
 	"io"
 	"io/ioutil"
 	"net/http"
