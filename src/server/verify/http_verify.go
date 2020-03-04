@@ -18,7 +18,7 @@ import (
 )
 
 // 处理gzip压缩
-func getZipData(response *http.Response) (body []byte, err error) {
+func GetZipData(response *http.Response) (body []byte, err error) {
 	var reader io.ReadCloser
 	switch response.Header.Get("Content-Encoding") {
 	case "gzip":
@@ -46,7 +46,7 @@ func HttpStatusCode(request *model.Request, response *http.Response) (code int, 
 
 	// 开启调试模式
 	if request.GetDebug() {
-		body, err := getZipData(response)
+		body, err := GetZipData(response)
 		fmt.Printf("请求结果 httpCode:%d body:%s err:%v \n", response.StatusCode, string(body), err)
 
 	}
@@ -72,7 +72,7 @@ func HttpJson(request *model.Request, response *http.Response) (code int, isSucc
 	code = response.StatusCode
 	if code == http.StatusOK {
 
-		body, err := getZipData(response)
+		body, err := GetZipData(response)
 		if err != nil {
 			code = model.ParseError
 			fmt.Printf("请求结果 ioutil.ReadAll err:%v", err)

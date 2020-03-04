@@ -39,7 +39,7 @@ func WebSocketJson(request *model.Request, seq string, msg []byte) (code int, is
 	} else {
 
 		if seq != responseJson.Seq {
-			code = model.ParseError
+			//code = model.ParseError
 			fmt.Println("请求和返回seq不一致 ~请求:", seq, responseJson.Seq, string(msg))
 		} else {
 			code = responseJson.Response.Code

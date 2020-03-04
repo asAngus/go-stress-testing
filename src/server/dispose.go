@@ -18,9 +18,9 @@ import (
 	"time"
 )
 
-const (
-	connectionMode = 1 // 1:顺序建立长链接 2:并发建立长链接
-)
+//const (
+//	connectionMode = 1 // 1:顺序建立长链接 2:并发建立长链接
+//)
 
 // 注册验证器
 func init() {
@@ -45,7 +45,6 @@ func Dispose(concurrency, totalNumber uint64, request *model.Request) {
 
 	wgReceiving.Add(1)
 	go statistics.ReceivingResults(concurrency, ch, &wgReceiving)
-
 	for i := uint64(0); i < concurrency; i++ {
 		wg.Add(1)
 		switch request.Form {
@@ -66,7 +65,7 @@ func Dispose(concurrency, totalNumber uint64, request *model.Request) {
 					continue
 				}
 
-				go golink.WebSocket(i, ch, totalNumber, &wg, request, ws)
+				go golink.WebSocket("6", "", i, ch, totalNumber, &wg, request, ws)
 			case 2:
 				// 并发建立长链接
 				go func(i uint64) {
@@ -79,7 +78,7 @@ func Dispose(concurrency, totalNumber uint64, request *model.Request) {
 						return
 					}
 
-					golink.WebSocket(i, ch, totalNumber, &wg, request, ws)
+					golink.WebSocket("6", "", i, ch, totalNumber, &wg, request, ws)
 				}(i)
 
 				// 注意:时间间隔太短会出现连接失败的报错 默认连接时长:20毫秒(公网连接)

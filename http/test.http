@@ -1,0 +1,9 @@
+###
+POST {{host}}/v1/edu/register/student/captchaSms
+Content-Type: application/json
+
+{
+  "mblNo": "18274235969"
+}
+
+###

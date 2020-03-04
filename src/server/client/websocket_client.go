@@ -10,7 +10,7 @@ package client
 import (
 	"errors"
 	"fmt"
-	"golang.org/x/net/websocket"
+	"github.com/gorilla/websocket"
 	"net/url"
 	"strings"
 )
@@ -90,7 +90,13 @@ func (w *WebSocket) GetConn() (err error) {
 	)
 
 	for i = 0; i < connRetry; i++ {
-		conn, err = websocket.Dial(w.getLink(), "", w.getOrigin())
+		//conn, err = websocket.Dial(w.getLink(), "", w.getOrigin())
+		conn, _, err = websocket.DefaultDialer.Dial(w.getLink(), nil)
+		//if err != nil {
+		//	log.Fatal("dial:", err)
+		//}
+		//defer c.Close()
+
 		if err != nil {
 			fmt.Println("GetConn 建立连接失败 in...", i, err)
 
@@ -116,7 +122,7 @@ func (w *WebSocket) Write(body []byte) (err error) {
 		return
 	}
 
-	_, err = w.conn.Write(body)
+	err = w.conn.WriteMessage(websocket.TextMessage, body)
 	if err != nil {
 		fmt.Println("发送数据失败:", err)
 
@@ -134,14 +140,15 @@ func (w *WebSocket) Read() (msg []byte, err error) {
 		return
 	}
 
-	msg = make([]byte, 512)
+	//msg = make([]byte, 10240)
 
-	n, err := w.conn.Read(msg)
+	//n, err := w.conn.Read(msg)
+	_, msg, err = w.conn.ReadMessage()
 	if err != nil {
 		fmt.Println("接收数据失败:", err)
 
 		return nil, err
 	}
 
-	return msg[:n], nil
+	return
 }

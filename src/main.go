@@ -11,8 +11,8 @@ import (
 	"flag"
 	"fmt"
 	"model"
-	"server"
 	"runtime"
+	"server"
 	"strings"
 )
 
@@ -31,6 +31,9 @@ func main() {
 		requestUrl  string // 压测的url 目前支持，http/https ws/wss
 		path        string // curl文件路径 http接口压测，自定义参数设置
 		verify      string // verify 验证方法 在server/verify中 http 支持:statusCode、json webSocket支持:json
+		m           uint64 //
+		spath        string
+		cids        string
 	)
 
 	flag.Uint64Var(&concurrency, "c", 1, "并发数")
@@ -39,7 +42,9 @@ func main() {
 	flag.StringVar(&requestUrl, "u", "", "压测地址")
 	flag.StringVar(&path, "p", "", "curl文件路径")
 	flag.StringVar(&verify, "v", "", "验证方法 http 支持:statusCode、json webSocket支持:json")
-
+	flag.Uint64Var(&m, "m", 1, "模式:1,course,0,默认")
+	flag.StringVar(&spath, "spath", "6", "学生列表,多个用逗号隔开")
+	flag.StringVar(&cids, "cids", "123", "课程列表,多个用逗号隔开")
 	// 解析参数
 	flag.Parse()
 	if concurrency == 0 || totalNumber == 0 || (requestUrl == "" && path == "") {
@@ -62,9 +67,13 @@ func main() {
 
 	fmt.Printf("\n 开始启动  并发数:%d 请求数:%d 请求参数: \n", concurrency, totalNumber)
 	request.Print()
+	if m == 1 {
 
-	// 开始处理
-	server.Dispose(concurrency, totalNumber, request)
+		server.Course(spath, cids, concurrency, totalNumber, request)
+	} else {
+		// 开始处理
+		server.Dispose(concurrency, totalNumber, request)
+	}
 
 	return
 }
