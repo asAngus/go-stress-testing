@@ -19,8 +19,12 @@ func main() {
 		pix string
 		url string
 		num uint64
+		//sl  int64
+		//s1  uint64
 	)
 	mChan := make(chan string, 10)
+	//flag.Int64Var(&sl, "sl", 100, "间隔多久开启一个协诚")
+	//flag.Uint64Var(&s1, "s", 3, "300个停多久")
 	flag.StringVar(&pix, "p", "", "号码前缀")
 	flag.StringVar(&url, "url", "http://dx.uat.huanqiujr.com", "地址")
 	flag.Parse()
@@ -90,7 +94,10 @@ func main() {
 
 			body := strings.NewReader(fmt.Sprintf(`{"mblNo": "%s"}`, mbl))
 
-			response, _ := client.HttpRequest("POST", url+"/v1/edu/register/student/captchaSms", body, headers, 0)
+			response, err := client.HttpRequest("POST", url+"/v1/edu/register/student/captchaSms", body, headers, 0)
+			if err != nil {
+
+			}
 			code := response.StatusCode
 			if code == http.StatusOK {
 				respBody, _ := verify.GetZipData(response)
@@ -114,6 +121,9 @@ func main() {
 			}
 		}(mbl)
 		time.Sleep(5 * time.Millisecond)
+		//if i%300 == 0 {
+		//	time.Sleep(3 * time.Second)
+		//}
 		i = i + 1
 		if i > num {
 			break
